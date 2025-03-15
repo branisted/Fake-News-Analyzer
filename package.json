@@ -3,7 +3,7 @@
   "productName": "fake-news-analyzer",
   "version": "1.0.0",
   "description": "My Electron application description",
-  "main": "src/index.js",
+  "main": "frontend/main.js",
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run electron\"",
     "package": "electron-forge package",
