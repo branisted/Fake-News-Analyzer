@@ -1,18 +1,12 @@
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
+const routes = require('./routes/routes.js');
+
+app.use(bodyParser.json());
+app.use('/', routes);
+
 const PORT = 3000;
-
-app.use(cors());
-app.use(express.json());
-
-app.get("/", (req, res) => {
-    res.send("Server is running!");
-});
-
 app.listen(PORT, () => {
-    console.log(`Backend running on http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });
-
-const authRoutes = require("./routes/auth");
-app.use("/auth", authRoutes);

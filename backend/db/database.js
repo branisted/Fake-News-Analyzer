@@ -1,18 +1,15 @@
-const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database("./backend/db/fake_news.db", (err) => {
-    if (err) console.error(err.message);
-    else console.log("Connected to SQLite database.");
-});
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 
-db.serialize(() => {
-    db.run(`
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            role TEXT NOT NULL
-        )
-    `);
+// Creează/Conectează baza de date
+const dbPath = path.resolve(__dirname, 'database.sqlite');
+const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+        console.error('Error connecting to DB:', err.message);
+    } else {
+        console.log('Connected to SQLite database');
+    }
 });
 
 module.exports = db;
+
