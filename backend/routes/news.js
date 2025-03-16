@@ -2,25 +2,29 @@ const express = require('express');
 const db = require('../db/database');
 const router = express.Router();
 
-// Salvare știre nouă
-router.post('/add', (req, res) => {
+router.post('/news/add', (req, res) => {
     const { title, content, source, date, verdict } = req.body;
-    const sql = `INSERT INTO news (title, content, source, date, verdict) VALUES (?, ?, ?, ?, ?)`;
-    db.run(sql, [title, content, source, date, verdict], function(err) {
+    if (!title || !content || !source || !date || !verdict) {
+        return res.status(400).json({ message: "All fields are required!" });
+    }
+
+    const stmt = db.prepare(`INSERT INTO news (title, content, source, date, verdict) VALUES (?, ?, ?, ?, ?)`);
+    stmt.run(title, content, source, date, verdict, function(err) {
         if (err) {
-            return res.status(400).json({ error: err.message });
+            return res.status(500).json({ message: "Database error", error: err.message });
         }
-        res.json({ message: 'News saved', id: this.lastID });
+        res.status(201).json({ message: "News added successfully!", id: this.lastID });
     });
+    stmt.finalize();
 });
 
-// Obține toate știrile
-router.get('/all', (req, res) => {
+// Obținere toate știrile
+router.get('/news', (req, res) => {
     db.all(`SELECT * FROM news`, [], (err, rows) => {
         if (err) {
-            res.status(400).json({ error: err.message });
+            return res.status(500).json({ message: "Database error", error: err.message });
         }
-        res.json({ news: rows });
+        res.status(200).json(rows);
     });
 });
 

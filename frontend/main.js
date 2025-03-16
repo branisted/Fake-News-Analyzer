@@ -12,7 +12,15 @@ function createWindow() {
         },
     });
 
-    win.loadFile("frontend/index.html");
+    win.loadFile("frontend/login.html");
+}
+
+function navigateTo(page) {
+    mainWindow.loadFile(page); // Load different HTML files dynamically
 }
 
 app.whenReady().then(createWindow);
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit();
+});
